@@ -411,6 +411,7 @@ h2 {
   padding: 1rem;
   background: rgba(5, 6, 7, 0.74);
   backdrop-filter: blur(10px);
+  overflow-y: auto;
 }
 
 .ending-overlay[hidden] {
@@ -420,9 +421,11 @@ h2 {
 .ending-dialog {
   position: relative;
   width: min(42rem, 100%);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
   border: 1px solid rgba(245, 239, 224, 0.18);
   border-radius: 8px;
-  padding: clamp(1.1rem, 4vw, 2rem);
+  padding: clamp(1rem, 3vw, 1.65rem);
   background: var(--panel-solid);
   box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.48);
 }
@@ -471,7 +474,7 @@ h2 {
 }
 
 .ending-dialog h2 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .ending-dialog p:not(.kicker) {
@@ -488,7 +491,7 @@ h2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
-  margin: 1.25rem 0;
+  margin: 1rem 0;
 }
 
 .ending-score div {
@@ -511,10 +514,10 @@ h2 {
 }
 
 .oracle-panel {
-  margin: 1.25rem 0;
+  margin: 1rem 0;
   border: 1px solid rgba(239, 179, 93, 0.28);
   border-radius: 8px;
-  padding: 1rem;
+  padding: 0.95rem;
   background:
     linear-gradient(135deg, rgba(239, 179, 93, 0.1), rgba(96, 196, 166, 0.06)),
     rgba(11, 13, 13, 0.42);
@@ -530,7 +533,9 @@ h2 {
 }
 
 .oracle-text {
-  min-height: 4.5rem;
+  min-height: 3.5rem;
+  max-height: min(15rem, 34vh);
+  overflow-y: auto;
   margin: 0 0 0.9rem;
   white-space: pre-line;
 }
