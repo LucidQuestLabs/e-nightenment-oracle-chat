@@ -626,7 +626,38 @@ h2 {
 }
 
 .session-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.session-summary {
+  display: block;
   padding: 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.session-summary::-webkit-details-marker {
+  display: none;
+}
+
+.session-summary::after {
+  content: "Open";
+  display: inline-grid;
+  min-height: 2rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-top: 0.85rem;
+  padding: 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.session-card[open] .session-summary::after {
+  content: "Close";
 }
 
 .session-card-header {
@@ -641,17 +672,24 @@ h2 {
   font-size: clamp(1.35rem, 3vw, 2.15rem);
 }
 
-.session-card-header > strong {
+.session-card-header p:not(.kicker) {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.session-score {
   flex: 0 0 auto;
   color: var(--focus);
   font-size: 1.15rem;
+  font-weight: 900;
 }
 
 .session-metrics {
   display: grid;
   grid-template-columns: 0.5fr 0.5fr 2fr;
   gap: 0.6rem;
-  margin: 0.9rem 0;
+  margin: 0.9rem 0 0;
 }
 
 .session-metrics div {
@@ -670,6 +708,11 @@ h2 {
 .session-metrics dd {
   margin: 0.2rem 0 0;
   font-weight: 900;
+}
+
+.session-details {
+  border-top: 1px solid var(--line);
+  padding: 1rem;
 }
 
 .session-choices {

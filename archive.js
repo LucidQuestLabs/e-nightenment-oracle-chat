@@ -56,47 +56,52 @@ function renderSummary(ledger) {
   dom.archiveStatus.textContent = ledger.length ? "Local only" : "No runs yet";
 }
 
-function renderSession(entry) {
-  const article = document.createElement("article");
-  article.className = "session-card";
+function renderSession(entry, index) {
+  const details = document.createElement("details");
+  details.className = "session-card";
 
   const final = entry.final || {};
   const title = final.ending?.title || "Unlabeled Dawn";
   const choices = entry.choices || [];
 
-  article.innerHTML = `
-    <div class="session-card-header">
-      <div>
-        <p class="kicker">${formatDate(entry.endedAt || entry.startedAt)}</p>
-        <h2>${title}</h2>
+  details.innerHTML = `
+    <summary class="session-summary">
+      <div class="session-card-header">
+        <div>
+          <p class="kicker">${formatDate(entry.endedAt || entry.startedAt)}</p>
+          <h2>${title}</h2>
+          <p>${choices.length} omens / ${final.glints ?? 0} glints / ${final.balance || "Unlit"}</p>
+        </div>
+        <span class="session-score">${final.balance || "Unlit"} ${final.score ?? 0}</span>
       </div>
-      <strong>${final.balance || "Unlit"} ${final.score ?? 0}</strong>
+      <dl class="session-metrics">
+        <div><dt>Glints</dt><dd>${final.glints ?? 0}</dd></div>
+        <div><dt>Spread</dt><dd>${final.spread ?? 0}</dd></div>
+        <div><dt>Weather</dt><dd>${statLine(final.stats)}</dd></div>
+      </dl>
+    </summary>
+    <div class="session-details">
+      <ol class="session-choices">
+        ${choices
+          .map(
+            (choice) => `
+              <li>
+                <strong>${choice.night}. ${choice.omen}</strong>
+                <span>${choice.choice} / ${choice.balanceAfter} / +${choice.glintsGained} glints</span>
+              </li>
+            `
+          )
+          .join("")}
+      </ol>
+      ${
+        final.oracleReading
+          ? `<p class="session-oracle">${final.oracleReading}</p>`
+          : `<p class="session-oracle is-empty">The oracle has not annotated this run.</p>`
+      }
     </div>
-    <dl class="session-metrics">
-      <div><dt>Glints</dt><dd>${final.glints ?? 0}</dd></div>
-      <div><dt>Spread</dt><dd>${final.spread ?? 0}</dd></div>
-      <div><dt>Weather</dt><dd>${statLine(final.stats)}</dd></div>
-    </dl>
-    <ol class="session-choices">
-      ${choices
-        .map(
-          (choice) => `
-            <li>
-              <strong>${choice.night}. ${choice.omen}</strong>
-              <span>${choice.choice} / ${choice.balanceAfter} / +${choice.glintsGained} glints</span>
-            </li>
-          `
-        )
-        .join("")}
-    </ol>
-    ${
-      final.oracleReading
-        ? `<p class="session-oracle">${final.oracleReading}</p>`
-        : `<p class="session-oracle is-empty">The oracle has not annotated this run.</p>`
-    }
   `;
 
-  return article;
+  return details;
 }
 
 function render() {
@@ -112,7 +117,7 @@ function render() {
     return;
   }
 
-  ledger.forEach((entry) => dom.sessionList.append(renderSession(entry)));
+  ledger.forEach((entry, index) => dom.sessionList.append(renderSession(entry, index)));
 }
 
 dom.exportButton.addEventListener("click", async () => {
