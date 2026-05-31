@@ -29,6 +29,14 @@ Optional Netlify environment variable:
 
 If `OPENAI_API_KEY` is missing, the game remains playable and the oracle panel shows an offline message.
 
+## Lantern Archive
+
+Completed runs are recorded locally in the player's browser and can be reviewed at `archive.html`.
+
+The archive tracks choices, stat deltas, glints gained, balance labels, final score, final stats, ending copy, and oracle reading when available. This data stays local to the browser unless a future sync layer is intentionally added.
+
+See `LEDGER.md` for the session schema and future backend path.
+
 ## Recommended Netlify Pipeline
 
 1. Push this folder to a GitHub, GitLab, Bitbucket, or Azure DevOps repository.
@@ -42,7 +50,11 @@ After the repository is linked, Netlify will deploy automatically whenever chang
 ## Files
 
 - `index.html`: markup and game surface
+- `archive.html`: local session archive view
+- `archive.js`: local ledger rendering, export, and clear controls
 - `styles.css`: responsive layout and visual system
 - `game.js`: encounter deck, state, scoring, endings, and canvas drawing
 - `netlify/functions/oracle.js`: server-side oracle reading endpoint
+- `OPERATIONS.md`: repo, deploy, verification, and secret-handling SOPs
+- `LEDGER.md`: local archive schema and backend migration notes
 - `SNAGS.md`: project setup snags and fixes worth preserving

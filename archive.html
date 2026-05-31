@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lantern Archive | E-Nightenment</title>
+    <meta
+      name="description"
+      content="Local session archive for E-Nightenment Oracle Edition runs, choices, glints, inner weather, and oracle readings."
+    >
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#101213">
+    <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="archive-page">
+    <main class="archive-shell" aria-labelledby="archive-title">
+      <header class="topbar archive-topbar">
+        <div>
+          <p class="kicker">Browser koan arcade - Oracle edition</p>
+          <h1 id="archive-title">Lantern Archive</h1>
+          <p class="game-summary">A local ledger of completed runs, inner-weather drift, glints, and oracle echoes.</p>
+        </div>
+        <div class="run-controls">
+          <a class="plain-link" href="index.html">Play</a>
+          <button id="exportButton" class="plain-button" type="button">Export</button>
+          <button id="clearButton" class="plain-button" type="button">Clear</button>
+        </div>
+      </header>
+
+      <section class="archive-summary" aria-label="Archive summary">
+        <div>
+          <p class="kicker">Runs</p>
+          <strong id="runCount">0</strong>
+        </div>
+        <div>
+          <p class="kicker">Avg glints</p>
+          <strong id="avgGlints">0</strong>
+        </div>
+        <div>
+          <p class="kicker">Avg score</p>
+          <strong id="avgScore">0</strong>
+        </div>
+        <div>
+          <p class="kicker">Common balance</p>
+          <strong id="commonBalance">None</strong>
+        </div>
+      </section>
+
+      <section class="archive-list" aria-label="Archived sessions">
+        <div class="panel-heading">
+          <p class="kicker">Session ledger</p>
+          <p id="archiveStatus">Local only</p>
+        </div>
+        <div id="sessionList"></div>
+      </section>
+    </main>
+
+    <script src="archive.js"></script>
+  </body>
+</html>

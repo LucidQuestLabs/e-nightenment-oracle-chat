@@ -414,6 +414,9 @@ const statColors = {
   shadow: "#8d84d8"
 };
 
+const LEDGER_KEY = "eNightenmentLedger";
+const LEDGER_LIMIT = 24;
+
 const skyPath = [
   [0.15, 0.25],
   [0.24, 0.19],
@@ -440,6 +443,8 @@ function shuffle(items) {
 
 function createState() {
   return {
+    sessionId: createSessionId(),
+    startedAt: new Date().toISOString(),
     night: 1,
     stats: {
       glow: 48,
@@ -458,8 +463,64 @@ function createState() {
     oracle: {
       status: "idle",
       text: ""
+    },
+    choices: [],
+    savedSession: false
+  };
+}
+
+function createSessionId() {
+  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  return `run-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function readLedger() {
+  try {
+    const ledger = JSON.parse(localStorage.getItem(LEDGER_KEY) || "[]");
+    return Array.isArray(ledger) ? ledger : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLedger(ledger) {
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger.slice(0, LEDGER_LIMIT)));
+}
+
+function currentSessionRecord(oracleReading = state.oracle.text) {
+  const score = scoreRun();
+  return {
+    sessionId: state.sessionId,
+    startedAt: state.startedAt,
+    endedAt: new Date().toISOString(),
+    choices: state.choices,
+    final: {
+      ending: state.ending,
+      glints: state.glints,
+      balance: balanceName(),
+      score: score.score,
+      spread: score.spread,
+      stats: { ...state.stats },
+      oracleReading: oracleReading || ""
     }
   };
+}
+
+function saveSession(oracleReading = state.oracle.text) {
+  if (state.phase !== "ended") return;
+
+  const ledger = readLedger();
+  const record = currentSessionRecord(oracleReading);
+  const index = ledger.findIndex((entry) => entry.sessionId === state.sessionId);
+
+  if (index >= 0) {
+    ledger[index] = record;
+  } else {
+    ledger.unshift(record);
+  }
+
+  writeLedger(ledger);
+  state.savedSession = true;
 }
 
 function statSpread(stats = state.stats) {
@@ -962,6 +1023,7 @@ async function askOracle() {
     }
 
     renderOracle("ready", data.reading);
+    saveSession(data.reading);
   } catch (error) {
     renderOracle(
       "error",
@@ -999,6 +1061,16 @@ function choose(index) {
     title: state.card.title,
     note: choice.label.toLowerCase()
   });
+  state.choices.push({
+    night: state.night,
+    omen: state.card.title,
+    choice: choice.label,
+    delta: { ...choice.delta },
+    glintsGained: gained,
+    balanceAfter: state.lastPulse.balance,
+    statsAfter: { ...state.stats },
+    timestamp: new Date().toISOString()
+  });
 
   dom.resultText.textContent =
     choice.result +
@@ -1035,6 +1107,7 @@ function finishRun() {
   dom.endingBalance.textContent = `${balanceName()} ${score.score}`;
   renderOracle("idle", "");
   dom.endingOverlay.hidden = false;
+  saveSession("");
   addParticles(90, "#efb35d");
 }
 

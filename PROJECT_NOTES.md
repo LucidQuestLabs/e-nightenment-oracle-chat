@@ -48,10 +48,14 @@ Added on 2026-05-30:
 - Netlify Function at `netlify/functions/oracle.js`.
 - Missing-key fallback that keeps the game playable.
 - Default model: `gpt-5-nano`, overrideable with `OPENAI_MODEL`.
+- Local `eNightenmentLedger` for completed run history.
+- `archive.html` Lantern Archive for reviewing run metrics and oracle readings.
 
-Still required before live oracle readings work:
+Operational docs:
 
-- Configure `OPENAI_API_KEY` in Netlify environment variables for the `e-nightenment-oracle-chat` project.
+- `OPERATIONS.md`: SOPs, release rules, Netlify/OpenAI notes, and verification checklist.
+- `LEDGER.md`: session schema, local-storage contract, and future backend migration path.
+- `SNAGS.md`: recurring setup issues and fixes.
 
 ## Local Run
 

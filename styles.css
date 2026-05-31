@@ -135,6 +135,24 @@ h2 {
     background 140ms ease;
 }
 
+.plain-link {
+  display: inline-grid;
+  min-height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 0.85rem;
+  color: var(--paper);
+  background: rgba(245, 239, 224, 0.06);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.plain-link:hover {
+  border-color: rgba(245, 239, 224, 0.32);
+  transform: translateY(-1px);
+}
+
 .plain-button {
   border: 1px solid var(--line);
   background: rgba(245, 239, 224, 0.08);
@@ -549,6 +567,139 @@ h2 {
   opacity: 0.72;
 }
 
+.archive-page {
+  overflow-y: auto;
+}
+
+.archive-shell {
+  width: min(78rem, 100%);
+  margin: 0 auto;
+  padding: clamp(0.9rem, 2vw, 1.5rem);
+}
+
+.archive-topbar {
+  margin-bottom: 1rem;
+}
+
+.archive-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.archive-summary div,
+.archive-list,
+.session-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.archive-summary div {
+  padding: 0.9rem;
+}
+
+.archive-summary strong {
+  display: block;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.archive-list {
+  padding: 1rem;
+}
+
+#archiveStatus {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+#sessionList {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.archive-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.session-card {
+  padding: 1rem;
+}
+
+.session-card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.session-card h2 {
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.35rem, 3vw, 2.15rem);
+}
+
+.session-card-header > strong {
+  flex: 0 0 auto;
+  color: var(--focus);
+  font-size: 1.15rem;
+}
+
+.session-metrics {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 2fr;
+  gap: 0.6rem;
+  margin: 0.9rem 0;
+}
+
+.session-metrics div {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 0.7rem;
+}
+
+.session-metrics dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.session-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 900;
+}
+
+.session-choices {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+}
+
+.session-choices strong {
+  color: var(--paper);
+}
+
+.session-choices span {
+  display: block;
+}
+
+.session-oracle {
+  margin: 0.95rem 0 0;
+  border-left: 3px solid rgba(239, 179, 93, 0.54);
+  padding-left: 0.85rem;
+  color: #f3dfb3;
+  line-height: 1.55;
+}
+
+.session-oracle.is-empty {
+  color: var(--muted);
+}
+
 @media (max-width: 980px) {
   body {
     overflow-y: auto;
@@ -688,6 +839,19 @@ h2 {
     line-height: 1.05;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  .archive-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .session-card-header,
+  .archive-topbar {
+    align-items: stretch;
+  }
+
+  .session-metrics {
+    grid-template-columns: 1fr;
   }
 
   .weather-chip::after {
