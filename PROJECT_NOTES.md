@@ -38,6 +38,21 @@ Recommended path:
 4. Cache or disable repeated oracle calls per completed run unless the player starts a new run.
 5. Keep the base static game playable when the oracle endpoint is unavailable.
 
+## Implementation Status
+
+Added on 2026-05-30:
+
+- End-screen `Lantern oracle` panel.
+- `Ask the Lantern` action after a completed run.
+- Compact client payload with ending, glints, balance, stats, journal, and sky marks.
+- Netlify Function at `netlify/functions/oracle.js`.
+- Missing-key fallback that keeps the game playable.
+- Default model: `gpt-5-nano`, overrideable with `OPENAI_MODEL`.
+
+Still required before live oracle readings work:
+
+- Configure `OPENAI_API_KEY` in Netlify environment variables for the `e-nightenment-oracle-chat` project.
+
 ## Local Run
 
 This remains a plain static app. It can be opened directly as `index.html`, or served locally with any static file server.

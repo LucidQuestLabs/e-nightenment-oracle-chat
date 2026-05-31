@@ -374,6 +374,9 @@ const dom = {
   endingText: document.querySelector("#endingText"),
   endingGlints: document.querySelector("#endingGlints"),
   endingBalance: document.querySelector("#endingBalance"),
+  oracleButton: document.querySelector("#oracleButton"),
+  oracleStatus: document.querySelector("#oracleStatus"),
+  oracleText: document.querySelector("#oracleText"),
   endingResetButton: document.querySelector("#endingResetButton"),
   values: {
     glow: document.querySelector("#glowValue"),
@@ -449,7 +452,12 @@ function createState() {
     phase: "choosing",
     journal: [],
     skyMarks: [],
-    lastPulse: null
+    lastPulse: null,
+    ending: null,
+    oracle: {
+      status: "idle",
+      text: ""
+    }
   };
 }
 
@@ -891,6 +899,76 @@ function renderJournal() {
   }
 }
 
+function buildOracleSummary() {
+  const score = scoreRun();
+  return {
+    ending: state.ending,
+    nightCount: MAX_NIGHTS,
+    glints: state.glints,
+    balance: balanceName(),
+    score: score.score,
+    spread: score.spread,
+    stats: { ...state.stats },
+    journal: state.journal.map((entry, index) => ({
+      night: index + 1,
+      omen: entry.title,
+      posture: entry.note
+    })),
+    skyMarks: state.skyMarks.map((mark) => ({
+      night: mark.night,
+      omen: mark.omen,
+      temperament: mark.temperament,
+      balance: mark.balance,
+      glintsGained: mark.glintsGained
+    }))
+  };
+}
+
+function renderOracle(status = state.oracle.status, text = state.oracle.text) {
+  state.oracle.status = status;
+  state.oracle.text = text;
+
+  const statusCopy = {
+    idle: "Ready",
+    loading: "Listening",
+    ready: "Answered",
+    error: "Clouded"
+  };
+
+  dom.oracleStatus.textContent = statusCopy[status] || "Ready";
+  dom.oracleText.textContent = text || "Invite the lantern to read the shape of your run.";
+  dom.oracleButton.disabled = status === "loading";
+  dom.oracleButton.textContent = status === "loading" ? "Listening..." : "Ask the Lantern";
+}
+
+async function askOracle() {
+  if (state.phase !== "ended" || state.oracle.status === "loading") return;
+
+  renderOracle("loading", "The lantern lowers its wick and considers the evidence.");
+
+  try {
+    const response = await fetch("/.netlify/functions/oracle", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(buildOracleSummary())
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || "The lantern could not reach the oracle.");
+    }
+
+    renderOracle("ready", data.reading);
+  } catch (error) {
+    renderOracle(
+      "error",
+      `${error.message} The ending still stands; only the extra shimmer is offline.`
+    );
+  }
+}
+
 function choose(index) {
   if (state.phase !== "choosing") return;
 
@@ -946,10 +1024,15 @@ function finishRun() {
   state.phase = "ended";
   const score = scoreRun();
   const ending = endingCopy.find((candidate) => candidate.test(score));
+  state.ending = {
+    title: ending.title,
+    text: ending.text
+  };
   dom.endingTitle.textContent = ending.title;
   dom.endingText.textContent = ending.text;
   dom.endingGlints.textContent = state.glints;
   dom.endingBalance.textContent = `${balanceName()} ${score.score}`;
+  renderOracle("idle", "");
   dom.endingOverlay.hidden = false;
   addParticles(90, "#efb35d");
 }
@@ -966,6 +1049,7 @@ function startRun() {
 dom.continueButton.addEventListener("click", nextNight);
 dom.resetButton.addEventListener("click", startRun);
 dom.endingResetButton.addEventListener("click", startRun);
+dom.oracleButton.addEventListener("click", askOracle);
 dom.weatherToggle.addEventListener("click", () => {
   const isCollapsed = dom.meters.classList.toggle("is-collapsed");
   dom.weatherToggle.setAttribute("aria-expanded", String(!isCollapsed));

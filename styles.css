@@ -459,6 +459,40 @@ h2 {
   font-weight: 900;
 }
 
+.oracle-panel {
+  margin: 1.25rem 0;
+  border: 1px solid rgba(239, 179, 93, 0.28);
+  border-radius: 8px;
+  padding: 1rem;
+  background:
+    linear-gradient(135deg, rgba(239, 179, 93, 0.1), rgba(96, 196, 166, 0.06)),
+    rgba(11, 13, 13, 0.42);
+}
+
+.oracle-panel .panel-heading {
+  margin-bottom: 0.6rem;
+}
+
+#oracleStatus {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.oracle-text {
+  min-height: 4.5rem;
+  margin: 0 0 0.9rem;
+  white-space: pre-line;
+}
+
+.oracle-button {
+  width: 100%;
+}
+
+.oracle-button[disabled] {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 @media (max-width: 980px) {
   body {
     overflow-y: auto;
