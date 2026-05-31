@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-Nightenment | Browser Koan Arcade</title>
+    <meta
+      name="description"
+      content="E-Nightenment is a browser-based text-and-canvas night game about glow, hush, spark, shadow, glints, and the suspiciously practical work of becoming a little more awake."
+    >
+    <meta
+      name="keywords"
+      content="E-Nightenment, browser game, text game, canvas game, interactive fiction, choice game, night game, koan arcade, glow, hush, spark, shadow, glints"
+    >
+    <meta name="author" content="LucidQuest Labs">
+    <meta name="application-name" content="E-Nightenment">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="theme-color" content="#101213">
+    <meta name="color-scheme" content="dark">
+    <link rel="canonical" href="https://e-nightenment.netlify.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="E-Nightenment">
+    <meta property="og:title" content="E-Nightenment | Browser Koan Arcade">
+    <meta
+      property="og:description"
+      content="A browser-based text-and-canvas night game about glow, hush, spark, shadow, glints, and becoming a little more awake."
+    >
+    <meta property="og:url" content="https://e-nightenment.netlify.app/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="E-Nightenment | Browser Koan Arcade">
+    <meta
+      name="twitter:description"
+      content="Choose through eight strange nights. Keep your inner weather balanced and collect glints before dawn."
+    >
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "E-Nightenment",
+        "alternateName": "Browser Koan Arcade",
+        "url": "https://e-nightenment.netlify.app/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any modern web browser",
+        "genre": ["Browser game", "Interactive fiction", "Choice game"],
+        "playMode": "SinglePlayer",
+        "description": "E-Nightenment is a browser-based text-and-canvas night game about glow, hush, spark, shadow, glints, and the suspiciously practical work of becoming a little more awake.",
+        "creator": {
+          "@type": "Organization",
+          "name": "LucidQuest Labs",
+          "url": "https://github.com/LucidQuestLabs"
+        },
+        "inLanguage": "en",
+        "isAccessibleForFree": true
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell" aria-labelledby="game-title">
+      <header class="topbar">
+        <div>
+          <p class="kicker">Browser koan arcade</p>
+          <h1 id="game-title">E-Nightenment</h1>
+          <p class="game-summary">
+            <span class="summary-desktop">A nocturnal choice game about glow, hush, spark, shadow, and collecting glints before dawn.</span>
+            <span class="summary-mobile">Choose through eight strange nights. Keep your inner weather balanced.</span>
+          </p>
+        </div>
+        <div class="run-controls">
+          <p id="nightCounter" class="night-counter" aria-live="polite">Night 1 / 8</p>
+          <button id="resetButton" class="plain-button" type="button">New Run</button>
+        </div>
+      </header>
+
+      <section class="playfield" aria-label="Night garden">
+        <canvas id="skyCanvas" width="1280" height="900" aria-hidden="true"></canvas>
+        <div class="scene-readout">
+          <p id="omenLabel" class="kicker">Omen</p>
+          <h2 id="omenTitle">Loading the lantern...</h2>
+          <p id="omenText"></p>
+        </div>
+      </section>
+
+      <aside class="control-panel" aria-label="Game choices and state">
+        <section class="meters is-collapsed" aria-label="Inner weather">
+          <button
+            id="weatherToggle"
+            class="weather-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="weatherDetails"
+          >
+            <span>Inner weather</span>
+            <span id="weatherToggleLabel">Show</span>
+          </button>
+          <div class="weather-summary" aria-label="Condensed inner weather">
+            <span class="weather-chip" data-stat="glow">Glow <strong id="glowChipValue">50</strong></span>
+            <span class="weather-chip" data-stat="hush">Hush <strong id="hushChipValue">50</strong></span>
+            <span class="weather-chip" data-stat="spark">Spark <strong id="sparkChipValue">50</strong></span>
+            <span class="weather-chip" data-stat="shadow">Shadow <strong id="shadowChipValue">50</strong></span>
+          </div>
+          <div id="weatherDetails" class="weather-details">
+            <div class="meter" data-stat="glow">
+              <div class="meter-label">
+                <span>Glow</span>
+                <strong id="glowValue">50</strong>
+              </div>
+              <div class="meter-track"><span id="glowBar"></span></div>
+            </div>
+            <div class="meter" data-stat="hush">
+              <div class="meter-label">
+                <span>Hush</span>
+                <strong id="hushValue">50</strong>
+              </div>
+              <div class="meter-track"><span id="hushBar"></span></div>
+            </div>
+            <div class="meter" data-stat="spark">
+              <div class="meter-label">
+                <span>Spark</span>
+                <strong id="sparkValue">50</strong>
+              </div>
+              <div class="meter-track"><span id="sparkBar"></span></div>
+            </div>
+            <div class="meter" data-stat="shadow">
+              <div class="meter-label">
+                <span>Shadow</span>
+                <strong id="shadowValue">50</strong>
+              </div>
+              <div class="meter-track"><span id="shadowBar"></span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="choices" aria-label="Available responses">
+          <div class="panel-heading">
+            <p class="kicker">Choose your posture</p>
+            <p id="glintCounter" class="glints">0 glints</p>
+          </div>
+          <p class="choice-helper">Pick a response. Balanced inner weather can earn extra glints.</p>
+          <div id="choiceList" class="choice-list"></div>
+          <div id="resultPane" class="result-pane" hidden>
+            <p class="kicker">The night answers</p>
+            <p id="resultText"></p>
+            <button id="continueButton" class="primary-button" type="button">Continue</button>
+          </div>
+        </section>
+
+        <section class="journal" aria-label="Lantern journal">
+          <div class="panel-heading">
+            <p class="kicker">Lantern journal</p>
+            <p id="balanceLabel">Unlit</p>
+          </div>
+          <ol id="journalList"></ol>
+        </section>
+      </aside>
+    </main>
+
+    <div id="endingOverlay" class="ending-overlay" hidden>
+      <section class="ending-dialog" aria-labelledby="endingTitle" aria-modal="true" role="dialog">
+        <p class="kicker">Dawn arrives sideways</p>
+        <h2 id="endingTitle"></h2>
+        <p id="endingText"></p>
+        <dl class="ending-score">
+          <div>
+            <dt>Glints</dt>
+            <dd id="endingGlints"></dd>
+          </div>
+          <div>
+            <dt>Balance</dt>
+            <dd id="endingBalance"></dd>
+          </div>
+        </dl>
+        <button id="endingResetButton" class="primary-button" type="button">Play Again</button>
+      </section>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>

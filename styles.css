@@ -1,0 +1,666 @@
+:root {
+  color-scheme: dark;
+  --ink: #f5efe0;
+  --muted: #bdb4a1;
+  --panel: rgba(24, 26, 25, 0.86);
+  --panel-solid: #181a19;
+  --line: rgba(245, 239, 224, 0.15);
+  --night: #0d1012;
+  --amber: #efb35d;
+  --teal: #60c4a6;
+  --rose: #d66c7a;
+  --violet: #8d84d8;
+  --green: #91bd6e;
+  --shadow: #6d6474;
+  --focus: #fff2b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #101213 0%, #14130f 46%, #0d1012 100%);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+button {
+  border: 0;
+  color: inherit;
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.game-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(21rem, 27rem);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  height: 100vh;
+  min-height: 100vh;
+  padding: clamp(0.75rem, 1.8vw, 1.5rem);
+}
+
+.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.kicker {
+  margin: 0 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.25rem, 5vw, 5.6rem);
+  font-weight: 700;
+  line-height: 0.9;
+}
+
+.game-summary {
+  max-width: 42rem;
+  margin: 0.45rem 0 0;
+  color: #d9cfb9;
+  font-size: clamp(0.94rem, 1.2vw, 1.05rem);
+  line-height: 1.35;
+}
+
+.summary-mobile {
+  display: none;
+}
+
+h2 {
+  margin-bottom: 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.8rem);
+  line-height: 1;
+}
+
+.run-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.night-counter,
+.glints,
+#balanceLabel {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.plain-button,
+.primary-button,
+.choice-button {
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.plain-button {
+  border: 1px solid var(--line);
+  background: rgba(245, 239, 224, 0.08);
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+}
+
+.plain-button:hover,
+.primary-button:hover,
+.choice-button:hover {
+  transform: translateY(-1px);
+}
+
+.playfield {
+  position: relative;
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #0b0f11;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.38);
+}
+
+#skyCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.scene-readout {
+  position: absolute;
+  left: clamp(1rem, 3vw, 2.25rem);
+  right: clamp(1rem, 15vw, 16rem);
+  bottom: clamp(1rem, 3vw, 2.25rem);
+  max-width: 47rem;
+  padding-top: 1rem;
+  text-shadow: 0 2px 1rem rgba(0, 0, 0, 0.9);
+}
+
+.scene-readout p:last-child {
+  max-width: 42rem;
+  margin: 0;
+  color: #f7e8c4;
+  font-size: clamp(1rem, 1.45vw, 1.2rem);
+  line-height: 1.55;
+}
+
+.control-panel {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: clamp(0.6rem, 1.1vw, 1rem);
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.meters,
+.choices,
+.journal {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px);
+}
+
+.meters {
+  display: grid;
+  padding: 1rem;
+}
+
+.weather-details {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.weather-toggle,
+.weather-summary {
+  display: none;
+}
+
+.meter-label,
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.meter-label {
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.meter-label strong {
+  color: var(--ink);
+  font-size: 0.86rem;
+}
+
+.meter-track {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(245, 239, 224, 0.11);
+}
+
+.meter-track span {
+  display: block;
+  width: 50%;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 420ms ease;
+}
+
+[data-stat="glow"] .meter-track span {
+  background: linear-gradient(90deg, #b8663d, var(--amber));
+}
+
+[data-stat="hush"] .meter-track span {
+  background: linear-gradient(90deg, #3e7971, var(--teal));
+}
+
+[data-stat="spark"] .meter-track span {
+  background: linear-gradient(90deg, #9c455c, var(--rose));
+}
+
+[data-stat="shadow"] .meter-track span {
+  background: linear-gradient(90deg, #4f4a5a, var(--violet));
+}
+
+.weather-chip[data-stat="glow"] {
+  border-color: rgba(239, 179, 93, 0.48);
+}
+
+.weather-chip[data-stat="hush"] {
+  border-color: rgba(96, 196, 166, 0.48);
+}
+
+.weather-chip[data-stat="spark"] {
+  border-color: rgba(214, 108, 122, 0.48);
+}
+
+.weather-chip[data-stat="shadow"] {
+  border-color: rgba(141, 132, 216, 0.48);
+}
+
+.weather-chip[data-stat="glow"]::after {
+  background: linear-gradient(90deg, #b8663d, var(--amber));
+}
+
+.weather-chip[data-stat="hush"]::after {
+  background: linear-gradient(90deg, #3e7971, var(--teal));
+}
+
+.weather-chip[data-stat="spark"]::after {
+  background: linear-gradient(90deg, #9c455c, var(--rose));
+}
+
+.weather-chip[data-stat="shadow"]::after {
+  background: linear-gradient(90deg, #4f4a5a, var(--violet));
+}
+
+.choices {
+  padding: 1rem;
+}
+
+.panel-heading {
+  margin-bottom: 0.45rem;
+}
+
+.choice-helper {
+  margin: 0 0 0.85rem;
+  color: #d9cfb9;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.choice-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.choice-button {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(245, 239, 224, 0.16);
+  background: rgba(245, 239, 224, 0.06);
+  text-align: left;
+}
+
+.choice-button strong {
+  color: var(--ink);
+  font-size: 0.98rem;
+}
+
+.choice-button span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.choice-button:hover {
+  border-color: rgba(239, 179, 93, 0.52);
+  background: rgba(239, 179, 93, 0.1);
+}
+
+.result-pane {
+  padding: 0.95rem 0 0;
+  border-top: 1px solid rgba(239, 179, 93, 0.3);
+}
+
+.result-pane p:not(.kicker) {
+  color: #f4dfb0;
+  line-height: 1.55;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 2.8rem;
+  background: linear-gradient(135deg, var(--amber), #cb6f56);
+  color: #1d1410;
+  font-weight: 900;
+}
+
+.primary-button:hover {
+  filter: saturate(1.08);
+}
+
+.journal {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+#journalList {
+  display: grid;
+  gap: 0.7rem;
+  flex: 1;
+  min-height: 0;
+  max-height: 100%;
+  margin: 0;
+  padding-left: 1.2rem;
+  overflow: auto;
+  color: var(--muted);
+  scrollbar-color: rgba(245, 239, 224, 0.3) transparent;
+}
+
+#journalList li {
+  padding-right: 0.35rem;
+  line-height: 1.45;
+}
+
+#journalList strong {
+  color: var(--ink);
+}
+
+.ending-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 6, 7, 0.74);
+  backdrop-filter: blur(10px);
+}
+
+.ending-overlay[hidden] {
+  display: none;
+}
+
+.ending-dialog {
+  width: min(42rem, 100%);
+  border: 1px solid rgba(245, 239, 224, 0.18);
+  border-radius: 8px;
+  padding: clamp(1.1rem, 4vw, 2rem);
+  background: var(--panel-solid);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.48);
+}
+
+.ending-dialog h2 {
+  margin-bottom: 1rem;
+}
+
+.ending-dialog p:not(.kicker) {
+  color: #f3dfb3;
+  line-height: 1.6;
+}
+
+.ending-score {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.ending-score div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.ending-score dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ending-score dd {
+  margin: 0.25rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+@media (max-width: 980px) {
+  body {
+    overflow-y: auto;
+  }
+
+  .game-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(28rem, 56vh) auto;
+    height: auto;
+  }
+
+  .playfield {
+    min-height: 28rem;
+  }
+
+  .control-panel {
+    grid-template-rows: auto auto auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  .choices {
+    order: 2;
+  }
+
+  .meters {
+    order: 1;
+  }
+
+  .journal {
+    order: 3;
+    max-height: 18rem;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 760px) {
+  .meters,
+  .choices,
+  .journal {
+    padding: 0.75rem;
+  }
+
+  .meters {
+    gap: 0.55rem;
+  }
+
+  .weather-details {
+    gap: 0.55rem;
+  }
+
+  .meter-label {
+    margin-bottom: 0.22rem;
+  }
+
+  .meter-track {
+    height: 0.45rem;
+  }
+
+  .panel-heading {
+    margin-bottom: 0.35rem;
+  }
+
+  .choice-helper {
+    margin-bottom: 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .choice-list {
+    gap: 0.5rem;
+  }
+
+  .choice-button {
+    min-height: 3.85rem;
+    padding: 0.62rem 0.75rem;
+  }
+
+  .choice-button strong {
+    font-size: 0.92rem;
+  }
+
+  .choice-button span {
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  #journalList {
+    gap: 0.4rem;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .meters {
+    gap: 0.75rem;
+  }
+
+  .weather-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 2rem;
+    padding: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .weather-toggle span:last-child {
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .weather-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .weather-chip {
+    display: grid;
+    position: relative;
+    gap: 0.18rem;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.54rem 0.42rem 0.68rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgba(245, 239, 224, 0.035);
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .weather-chip::after {
+    position: absolute;
+    right: 0.42rem;
+    bottom: 0.42rem;
+    left: 0.42rem;
+    height: 0.24rem;
+    border-radius: 999px;
+    content: "";
+  }
+
+  .weather-chip strong {
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .meters.is-collapsed .weather-details {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .run-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .game-summary {
+    max-width: 20rem;
+    margin-top: 0.55rem;
+    font-size: 0.92rem;
+  }
+
+  .summary-desktop {
+    display: none;
+  }
+
+  .summary-mobile {
+    display: inline;
+  }
+
+  .scene-readout {
+    right: 1rem;
+  }
+
+  .ending-score {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
