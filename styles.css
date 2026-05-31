@@ -125,7 +125,8 @@ h2 {
 
 .plain-button,
 .primary-button,
-.choice-button {
+.choice-button,
+.icon-button {
   border-radius: 6px;
   cursor: pointer;
   transition:
@@ -143,7 +144,8 @@ h2 {
 
 .plain-button:hover,
 .primary-button:hover,
-.choice-button:hover {
+.choice-button:hover,
+.icon-button:hover {
   transform: translateY(-1px);
 }
 
@@ -416,12 +418,56 @@ h2 {
 }
 
 .ending-dialog {
+  position: relative;
   width: min(42rem, 100%);
   border: 1px solid rgba(245, 239, 224, 0.18);
   border-radius: 8px;
   padding: clamp(1.1rem, 4vw, 2rem);
   background: var(--panel-solid);
   box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.48);
+}
+
+.ending-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.ending-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.oracle-mark {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
+  border: 1px solid rgba(239, 179, 93, 0.34);
+  border-radius: 50%;
+  color: var(--gold);
+  background:
+    radial-gradient(circle, rgba(239, 179, 93, 0.2), rgba(96, 196, 166, 0.05) 62%, transparent 63%),
+    rgba(11, 13, 13, 0.56);
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.icon-button {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  padding: 0;
+  border-radius: 50%;
+  color: var(--paper);
+  background: rgba(245, 239, 224, 0.08);
+  font-size: 1.45rem;
+  line-height: 1;
 }
 
 .ending-dialog h2 {
@@ -431,6 +477,11 @@ h2 {
 .ending-dialog p:not(.kicker) {
   color: #f3dfb3;
   line-height: 1.6;
+}
+
+.oracle-invite {
+  margin-top: 0.85rem;
+  color: var(--muted);
 }
 
 .ending-score {

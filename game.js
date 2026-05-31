@@ -377,6 +377,7 @@ const dom = {
   oracleButton: document.querySelector("#oracleButton"),
   oracleStatus: document.querySelector("#oracleStatus"),
   oracleText: document.querySelector("#oracleText"),
+  endingCloseButton: document.querySelector("#endingCloseButton"),
   endingResetButton: document.querySelector("#endingResetButton"),
   values: {
     glow: document.querySelector("#glowValue"),
@@ -1049,6 +1050,9 @@ function startRun() {
 dom.continueButton.addEventListener("click", nextNight);
 dom.resetButton.addEventListener("click", startRun);
 dom.endingResetButton.addEventListener("click", startRun);
+dom.endingCloseButton.addEventListener("click", () => {
+  dom.endingOverlay.hidden = true;
+});
 dom.oracleButton.addEventListener("click", askOracle);
 dom.weatherToggle.addEventListener("click", () => {
   const isCollapsed = dom.meters.classList.toggle("is-collapsed");
@@ -1062,6 +1066,9 @@ window.addEventListener("keydown", (event) => {
   }
   if ((event.key === "Enter" || event.key === " ") && state.phase === "resolved") {
     nextNight();
+  }
+  if (event.key === "Escape" && state.phase === "ended") {
+    dom.endingOverlay.hidden = true;
   }
 });
 

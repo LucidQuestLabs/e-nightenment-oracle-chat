@@ -90,7 +90,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || DEFAULT_MODEL,
         input: prompt,
-        max_output_tokens: 180,
+        max_output_tokens: 240,
         reasoning: { effort: "minimal" }
       })
     });

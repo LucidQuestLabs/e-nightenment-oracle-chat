@@ -157,9 +157,16 @@
 
     <div id="endingOverlay" class="ending-overlay" hidden>
       <section class="ending-dialog" aria-labelledby="endingTitle" aria-modal="true" role="dialog">
-        <p class="kicker">Dawn arrives sideways</p>
+        <div class="ending-topline">
+          <p class="kicker">Browser koan arcade - Oracle edition</p>
+          <div class="ending-actions">
+            <span class="oracle-mark" aria-hidden="true">✦</span>
+            <button id="endingCloseButton" class="icon-button" type="button" aria-label="Close ending summary">×</button>
+          </div>
+        </div>
         <h2 id="endingTitle"></h2>
         <p id="endingText"></p>
+        <p class="oracle-invite">Ask the lantern oracle for a brief reading of your path through the eight nights.</p>
         <dl class="ending-score">
           <div>
             <dt>Glints</dt>
